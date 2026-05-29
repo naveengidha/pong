@@ -1,10 +1,10 @@
-const CACHE = 'pong-v3';
+const CACHE = 'pong-v4';
 const ASSETS = [
-  'index.html',
-  'game.js',
-  'manifest.json',
-  'icons/icon-192.png',
-  'icons/icon-512.png',
+  './index.html',
+  './game.js',
+  './manifest.json',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
 ];
 
 self.addEventListener('install', e => {
@@ -24,10 +24,12 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  // For HTML navigation requests always serve index.html from cache
   if (e.request.mode === 'navigate') {
+    // Resolve index.html relative to the SW's own location so it works
+    // whether the app is at the root or nested under a subdirectory.
+    const indexURL = new URL('./index.html', self.location).href;
     e.respondWith(
-      caches.match('index.html').then(cached => cached || fetch(e.request))
+      caches.match(indexURL).then(cached => cached || fetch(e.request))
     );
     return;
   }
