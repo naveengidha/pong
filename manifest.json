@@ -2,7 +2,7 @@
   "name": "PONG",
   "short_name": "PONG",
   "description": "Classic arcade Pong game",
-  "start_url": "/",
+  "start_url": "/index.html",
   "display": "fullscreen",
   "orientation": "portrait",
   "background_color": "#000000",
