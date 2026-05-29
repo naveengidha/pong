@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Classic Pong arcade game" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <title>PONG</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100dvh;
+      overflow: hidden;
+      font-family: 'Courier New', monospace;
+      touch-action: none;
+    }
+
+    #game-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #canvas {
+      display: block;
+      border: 2px solid #fff;
+      image-rendering: pixelated;
+    }
+
+    #overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      text-align: center;
+      gap: 16px;
+    }
+
+    #overlay h1 {
+      font-size: clamp(2rem, 8vw, 4rem);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+    }
+
+    #overlay p {
+      font-size: clamp(0.75rem, 2.5vw, 1rem);
+      letter-spacing: 0.15em;
+      opacity: 0.7;
+    }
+
+    #start-btn {
+      margin-top: 8px;
+      padding: 12px 32px;
+      background: transparent;
+      color: #fff;
+      border: 2px solid #fff;
+      font-family: 'Courier New', monospace;
+      font-size: clamp(0.75rem, 2.5vw, 1rem);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    #start-btn:hover, #start-btn:focus {
+      background: #fff;
+      color: #000;
+      outline: none;
+    }
+
+    #instructions {
+      margin-top: 24px;
+      font-size: clamp(0.6rem, 1.8vw, 0.8rem);
+      letter-spacing: 0.1em;
+      opacity: 0.5;
+      line-height: 1.8;
+    }
+
+    #pause-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 36px;
+      height: 36px;
+      background: transparent;
+      border: 2px solid rgba(255,255,255,0.4);
+      color: #fff;
+      font-size: 16px;
+      line-height: 1;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.15s;
+    }
+
+    #pause-btn.visible {
+      display: flex;
+    }
+
+    #pause-btn:hover, #pause-btn:focus {
+      border-color: #fff;
+      outline: none;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <div id="game-container">
+    <canvas id="canvas"></canvas>
+    <button id="pause-btn" aria-label="Pause">&#9646;&#9646;</button>
+    <div id="overlay">
+      <h1>PONG</h1>
+      <p>FIRST TO 11 WINS</p>
+      <button id="start-btn">INSERT COIN</button>
+      <div id="instructions">
+        MOVE PADDLE &nbsp; ← / → &nbsp; or &nbsp; A / D<br />
+        TOUCH: DRAG YOUR PADDLE AT THE BOTTOM
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js');
+      });
+    }
+  </script>
+</body>
+</html>
