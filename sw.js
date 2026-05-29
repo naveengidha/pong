@@ -1,10 +1,10 @@
-const CACHE = 'pong-v2';
+const CACHE = 'pong-v3';
 const ASSETS = [
-  '/index.html',
-  '/game.js',
-  '/manifest.json',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png',
+  'index.html',
+  'game.js',
+  'manifest.json',
+  'icons/icon-192.png',
+  'icons/icon-512.png',
 ];
 
 self.addEventListener('install', e => {
@@ -27,7 +27,7 @@ self.addEventListener('fetch', e => {
   // For HTML navigation requests always serve index.html from cache
   if (e.request.mode === 'navigate') {
     e.respondWith(
-      caches.match('/index.html').then(cached => cached || fetch(e.request))
+      caches.match('index.html').then(cached => cached || fetch(e.request))
     );
     return;
   }
