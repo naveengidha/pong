@@ -45,28 +45,78 @@
       position: absolute;
       inset: 0;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      color: #fff;
-      text-align: center;
-      gap: 16px;
+      background: rgba(0, 0, 0, 0.6);
     }
 
-    #overlay h1 {
-      font-size: clamp(2rem, 8vw, 4rem);
-      letter-spacing: 0.3em;
+    #modal {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding: clamp(24px, 5vw, 40px) clamp(28px, 6vw, 48px);
+      background: #111;
+      border: 2px solid #fff;
+      color: #fff;
+      text-align: center;
+      width: min(340px, 80%);
+    }
+
+    #theme-options {
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .theme-btn {
+      flex: 1;
+      padding: 8px 4px;
+      background: transparent;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.35);
+      font-family: 'Courier New', monospace;
+      font-size: clamp(0.55rem, 1.8vw, 0.7rem);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+
+    .theme-btn:hover, .theme-btn:focus {
+      border-color: #fff;
+      outline: none;
+    }
+
+    .theme-btn.active {
+      background: #fff;
+      color: #000;
+      border-color: #fff;
+    }
+
+    #theme-label {
+      font-size: clamp(0.5rem, 1.5vw, 0.62rem);
+      letter-spacing: 0.12em;
+      opacity: 0.35;
+      text-transform: uppercase;
+      align-self: flex-start;
+    }
+
+    #modal h1 {
+      font-size: clamp(2rem, 8vw, 3rem);
+      letter-spacing: 0.35em;
       text-transform: uppercase;
     }
 
-    #overlay p {
-      font-size: clamp(0.75rem, 2.5vw, 1rem);
-      letter-spacing: 0.15em;
-      opacity: 0.7;
+    #modal hr {
+      width: 100%;
+      border: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     #start-btn {
-      margin-top: 8px;
       padding: 12px 32px;
       background: transparent;
       color: #fff;
@@ -85,12 +135,39 @@
       outline: none;
     }
 
-    #instructions {
-      margin-top: 24px;
-      font-size: clamp(0.6rem, 1.8vw, 0.8rem);
+    #menu-rules {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: clamp(0.65rem, 2vw, 0.8rem);
       letter-spacing: 0.1em;
+      opacity: 0.65;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    #menu-rules .rule-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    #menu-rules .dot {
+      width: 4px;
+      height: 4px;
+      background: #fff;
+      border-radius: 50%;
+      flex-shrink: 0;
       opacity: 0.5;
-      line-height: 1.8;
+    }
+
+    #menu-controls {
+      font-size: clamp(0.55rem, 1.6vw, 0.68rem);
+      letter-spacing: 0.08em;
+      opacity: 0.3;
+      line-height: 2;
+      text-align: center;
     }
 
     #pause-btn {
@@ -130,18 +207,38 @@
     <canvas id="canvas"></canvas>
     <button id="pause-btn" aria-label="Pause">&#9646;&#9646;</button>
     <div id="overlay">
-      <h1>PONG</h1>
-      <p>FIRST TO 11 WINS</p>
-      <button id="start-btn">INSERT COIN</button>
-      <div id="instructions">
-        MOVE PADDLE &nbsp; ← / → &nbsp; or &nbsp; A / D<br />
-        TOUCH: DRAG YOUR PADDLE AT THE BOTTOM
+      <div id="modal">
+        <h1>PONG</h1>
+        <hr />
+        <div id="menu-rules">
+          <div class="rule-row"><span class="dot"></span>YOU VS CPU<span class="dot"></span></div>
+          <div class="rule-row">BOUNCE THE BALL PAST YOUR OPPONENT</div>
+          <div class="rule-row">FIRST TO 9 POINTS WINS</div>
+          <div class="rule-row">BALL SPEEDS UP WITH EACH HIT</div>
+        </div>
+        <span id="theme-label">THEME</span>
+        <div id="theme-options">
+          <button class="theme-btn active" data-theme="classic">CLASSIC</button>
+          <button class="theme-btn" data-theme="hockey">HOCKEY</button>
+        </div>
+        <button id="start-btn">INSERT COIN</button>
+        <div id="menu-controls">
+          ← / → &nbsp; OR &nbsp; A / D &nbsp;&nbsp;·&nbsp;&nbsp; TOUCH: DRAG PADDLE
+        </div>
       </div>
     </div>
   </div>
 
   <script src="game.js"></script>
   <script>
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        window.setTheme(btn.dataset.theme);
+      });
+    });
+
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js');
